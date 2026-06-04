@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bonbon Dashboard</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
+body{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:linear-gradient(
+        135deg,
+        #ffe8f3,
+        #fff0f7,
+        #ffe1f0
+    );
+    padding:20px;
+    overflow-x:hidden;
+}
+
+.container{
+    width:100%;
+    max-width:900px;
+}
+
+.dashboard{
+    background:white;
+    border-radius:35px;
+    padding:50px;
+    box-shadow:0 20px 40px rgba(255,105,180,.15);
+    text-align:center;
+    position:relative;
+    z-index:10;
+}
+
+.badge{
+    display:inline-block;
+    background:#ffe4f0;
+    color:#d64f92;
+    padding:8px 20px;
+    border-radius:999px;
+    font-size:13px;
+    margin-bottom:20px;
+    font-weight:600;
+}
+
+.title{
+    font-size:70px;
+    color:#e94da4;
+    line-height:1;
+    margin-bottom:10px;
+}
+
+.subtitle{
+    color:#8b6f7f;
+    font-size:22px;
+    margin-bottom:10px;
+    font-style:italic;
+}
+
+.desc{
+    color:#777;
+    margin-bottom:40px;
+}
+
+.menu{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:25px;
+}
+
+.card{
+    background:#fff;
+    border:1px solid #f4d8e7;
+    border-radius:25px;
+    padding:30px;
+    cursor:pointer;
+    transition:.3s;
+}
+
+.card:hover{
+    transform:translateY(-8px);
+    box-shadow:0 15px 25px rgba(233,77,164,.15);
+}
+
+.icon{
+    width:70px;
+    height:70px;
+    margin:auto;
+    margin-bottom:15px;
+    border-radius:20px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:30px;
+    background:linear-gradient(
+        135deg,
+        #ffd2eb,
+        #ffc2e3
+    );
+}
+
+.card h3{
+    color:#444;
+    margin-bottom:10px;
+}
+
+.card p{
+    color:#777;
+    font-size:14px;
+}
+
+.footer{
+    margin-top:30px;
+    color:#999;
+    font-size:14px;
+}
+
+#particles-container{
+    position:fixed;
+    inset:0;
+    display:none;
+    z-index:999;
+    background:rgba(255,240,247,.95);
+}
+
+.close-info{
+    position:fixed;
+    top:20px;
+    left:50%;
+    transform:translateX(-50%);
+    background:white;
+    padding:10px 20px;
+    border-radius:30px;
+    color:#e94da4;
+    font-weight:600;
+    z-index:1000;
+    display:none;
+}
+
+@media(max-width:768px){
+
+.title{
+    font-size:48px;
+}
+
+.subtitle{
+    font-size:18px;
+}
+
+.dashboard{
+    padding:30px;
+}
+
+.menu{
+    grid-template-columns:1fr;
+}
+
+}
+
+</style>
+</head>
+<body>
+
+<div class="close-info" id="closeInfo">
+Klik tombol Partikel lagi untuk menutup 💖
+</div>
+
+<div id="particles-container"></div>
+
+<div class="container">
+
+<div class="dashboard">
+
+<div class="badge">
+ONLINE EXPERIENCE ✦ V1
+</div>
+
+<h1 class="title">hollnath</h1>
+
+<div class="subtitle">
+untuk kamu, holl 🎀
+</div>
+
+<p class="desc">
+Semoga suka ya! 💕
+</p>
+
+<div class="menu">
+
+<div class="card" onclick="window.location.href='love3d.html'">
+    <div class="icon">💖</div>
+    <h3>Love 3D</h3>
+    <p>Masuk ke dunia hati 3D interaktif.</p>
+</div>
+
+<div class="card" onclick="window.location.href='Studio_booth.html'">
+    <div class="icon">📸</div>
+    <h3>Studio Booth</h3>
+    <p>Filter foto lucu dan aesthetic.</p>
+</div>
+
+<div class="card" onclick="window.location.href='gallery.html'">
+    <div class="icon">✨</div>
+    <h3>Gallery Holly</h3>
+</div>
+
+<div class="card" onclick="window.location.href='love.html'">
+    <div class="icon">💌</div>
+    <h3>Love Letter</h3>
+</div>
+
+</div>
+
+<div class="footer">
+dibuat dengan 💗 oleh kamu
+</div>
+
+</div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/tsparticles@3/tsparticles.bundle.min.js"></script>
+
+<script>
+
+function openFeature(feature){
+    alert("Membuka " + feature);
+}
+
+let particleActive = false;
+
+async function toggleParticles(){
+
+    const container =
+    document.getElementById("particles-container");
+
+    const info =
+    document.getElementById("closeInfo");
+
+    if(particleActive){
+
+        container.style.display = "none";
+        info.style.display = "none";
+
+        particleActive = false;
+        return;
+    }
+
+    container.style.display = "block";
+    info.style.display = "block";
+
+    particleActive = true;
+
+    await tsParticles.load({
+        id:"particles-container",
+
+        options:{
+
+            fullScreen:false,
+
+            background:{
+                color:"transparent"
+            },
+
+            particles:{
+
+                number:{
+                    value:150
+                },
+
+                color:{
+                    value:[
+                        "#ff69b4",
+                        "#ff8ccf",
+                        "#ffb6d9",
+                        "#ffc0cb"
+                    ]
+                },
+
+                shape:{
+                    type:"circle"
+                },
+
+                opacity:{
+                    value:0.8
+                },
+
+                size:{
+                    value:{
+                        min:2,
+                        max:6
+                    }
+                },
+
+                move:{
+                    enable:true,
+                    speed:2,
+                    outModes:{
+                        default:"bounce"
+                    }
+                },
+
+                links:{
+                    enable:true,
+                    distance:120,
+                    color:"#ff8ccf",
+                    opacity:0.3
+                }
+
+            },
+
+            interactivity:{
+
+                events:{
+
+                    onHover:{
+                        enable:true,
+                        mode:"repulse"
+                    },
+
+                    onClick:{
+                        enable:true,
+                        mode:"push"
+                    }
+
+                },
+
+                modes:{
+
+                    repulse:{
+                        distance:150
+                    },
+
+                    push:{
+                        quantity:8
+                    }
+
+                }
+
+            }
+
+        }
+
+    });
+
+}
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Love 3D | I Love You Holl</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            font-family: 'Poppins', 'Segoe UI', 'Montserrat', sans-serif;
+        }
+
+        .info-panel {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(0,0,0,0.65);
+            backdrop-filter: blur(12px);
+            border-radius: 24px;
+            padding: 12px 20px;
+            color: white;
+            z-index: 10;
+            pointer-events: none;
+            border: 1px solid rgba(255,255,255,0.2);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+            font-size: 13px;
+            font-weight: 500;
+            letter-spacing: 0.3px;
+        }
+        .info-panel h3 {
+            margin: 0 0 6px 0;
+            font-size: 18px;
+            letter-spacing: 1px;
+        }
+        .info-panel p {
+            margin: 4px 0;
+            font-size: 12px;
+            opacity: 0.9;
+        }
+        .info-panel .shortcuts {
+            display: flex;
+            gap: 16px;
+            margin-top: 6px;
+            flex-wrap: wrap;
+        }
+        .shortcuts span {
+            background: rgba(255,255,255,0.2);
+            border-radius: 20px;
+            padding: 2px 8px;
+            font-size: 11px;
+            font-family: monospace;
+        }
+
+        .controls {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            z-index: 20;
+            display: flex;
+            gap: 12px;
+            pointer-events: auto;
+        }
+        button {
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255,255,255,0.3);
+            color: white;
+            padding: 8px 18px;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: inherit;
+            transition: all 0.2s ease;
+            font-size: 14px;
+            letter-spacing: 0.5px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+        button:hover {
+            background: rgba(255,80,120,0.9);
+            border-color: rgba(255,255,255,0.8);
+            transform: scale(1.02);
+        }
+        .tip {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(8px);
+            padding: 6px 16px;
+            border-radius: 40px;
+            color: #ffdddd;
+            font-size: 12px;
+            font-weight: 500;
+            white-space: nowrap;
+            pointer-events: none;
+            z-index: 10;
+            font-family: monospace;
+            border: 1px solid rgba(255,200,200,0.3);
+        }
+        
+        /* Tombol Amplop Love */
+        .love-envelope-btn {
+            position: absolute;
+            bottom: 100px;
+            right: 20px;
+            background: linear-gradient(135deg, #ff3366, #ff6699);
+            border: none;
+            color: white;
+            padding: 14px 24px;
+            border-radius: 60px;
+            font-weight: bold;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 16px;
+            z-index: 20;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 8px 20px rgba(255,51,102,0.4);
+            transition: all 0.3s ease;
+            animation: glowPulse 2s infinite;
+        }
+        .love-envelope-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 12px 30px rgba(255,51,102,0.6);
+        }
+        .love-envelope-btn .envelope-icon {
+            font-size: 24px;
+        }
+        @keyframes glowPulse {
+            0%, 100% { box-shadow: 0 8px 20px rgba(255,51,102,0.4); }
+            50% { box-shadow: 0 8px 30px rgba(255,51,102,0.8); }
+        }
+        
+        /* Pesan overlay untuk I Love You Holly */
+        .message-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.85);
+ backdrop-filter: blur(15px);
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.5s ease;
+            cursor: pointer;
+        }
+        .message-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        .message-card {
+            text-align: center;
+            animation: popIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+        .message-card h1 {
+            font-size: 70px;
+            color: #ff6699;
+            text-shadow: 0 0 20px #ff3366, 0 0 40px #ff3366;
+            margin: 20px 0;
+            letter-spacing: 4px;
+        }
+        .message-card p {
+            font-size: 28px;
+            color: white;
+            margin: 20px 0;
+        }
+        .message-card .heart-big {
+            font-size: 100px;
+            animation: heartbeat 1s infinite;
+            display: inline-block;
+        }
+        @keyframes popIn {
+            0% { transform: scale(0); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+        @media (max-width: 700px) {
+            .message-card h1 { font-size: 40px; }
+            .message-card p { font-size: 20px; }
+            .love-envelope-btn { padding: 10px 18px; font-size: 13px; bottom: 80px; }
+        }
+        
+        .dashboard-link {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(8px);
+            padding: 8px 16px;
+            border-radius: 40px;
+            z-index: 20;
+            pointer-events: auto;
+            font-weight: 500;
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+            transition: 0.2s;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .dashboard-link:hover {
+            background: #ff3366;
+            border-color: white;
+        }
+        canvas {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="dashboard-link" id="backDashboard">← Kembali ke Dashboard</a>
+    
+    <!-- Tombol Amplop Love -->
+    <button class="love-envelope-btn" id="loveEnvelopeBtn">
+        <span class="envelope-icon">💌</span>
+        <span>Klik Ini</span>
+        <span>❤️</span>
+    </button>
+    
+    <!-- Pesan Overlay -->
+    <div class="message-overlay" id="messageOverlay">
+        <div class="message-card">
+            <div class="heart-big">❤️</div>
+            <h1>I LOVE YOU</h1>
+            <h1 style="font-size: 80px; color: #ff88aa;">HOLL</h1>
+            <p>You are my everything 💕</p>
+            <p style="font-size: 18px; opacity: 0.7;">✨ Klik di mana saja untuk kembali ✨</p>
+        </div>
+    </div>
+    
+    <div class="info-panel">
+        <h3>❤️ Love 3D | I Love You Holly</h3>
+        <div class="shortcuts">
+            <span>🖱️ Drag kiri : Putar</span>
+            <span>🔍 Scroll : Zoom</span>
+            <span>✋ Drag kanan : Geser</span>
+            <span>⌨️ R : Reset Kamera</span>
+        </div>
+        <p>✨ Efek: Partikel Love • Bintang • Kelopak Bunga 🌸</p>
+    </div>
+    <div class="controls">
+        <button id="resetCameraBtn">⟳ R - Reset Kamera</button>
+    </div>
+    <div class="tip">💡 Tip: Zoom out untuk melihat bentuk hati, zoom in untuk melihat fotonya lebih dekat</div>
+
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.128.0/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.128.0/examples/jsm/"
+            }
+        }
+    </script>
+
+    <script type="module">
+        import * as THREE from 'three';
+        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+        import { CSS2DRenderer, CSS2DObject } from 'three/addons/renderers/CSS2DRenderer.js';
+
+        // --- Setup Scene, Camera, Renderers ---
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x050b1a);
+        scene.fog = new THREE.FogExp2(0x050b1a, 0.003);
+
+        const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.set(5, 4, 8);
+        camera.lookAt(0, 0, 0);
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.shadowMap.enabled = true;
+        renderer.setPixelRatio(window.devicePixelRatio);
+        document.body.appendChild(renderer.domElement);
+
+        const labelRenderer = new CSS2DRenderer();
+        labelRenderer.setSize(window.innerWidth, window.innerHeight);
+        labelRenderer.domElement.style.position = 'absolute';
+        labelRenderer.domElement.style.top = '0px';
+        labelRenderer.domElement.style.left = '0px';
+        labelRenderer.domElement.style.pointerEvents = 'none';
+        document.body.appendChild(labelRenderer.domElement);
+
+        // --- Controls ---
+        const controls = new OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
+        controls.dampingFactor = 0.05;
+        controls.rotateSpeed = 1.2;
+        controls.zoomSpeed = 1.2;
+        controls.enableZoom = true;
+        controls.enablePan = true;
+        controls.mouseButtons = {
+            LEFT: THREE.MOUSE.ROTATE,
+            MIDDLE: THREE.MOUSE.DOLLY,
+            RIGHT: THREE.MOUSE.PAN
+        };
+        
+        const resetCamera = () => {
+            camera.position.set(5, 4, 8);
+            controls.target.set(0, 0, 0);
+            controls.update();
+        };
+        document.getElementById('resetCameraBtn').addEventListener('click', resetCamera);
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'r' || e.key === 'R') {
+                resetCamera();
+                e.preventDefault();
+            }
+        });
+
+        // --- BINTANG ---
+        const starGeometry = new THREE.BufferGeometry();
+        const starCount = 1800;
+        const starPositions = new Float32Array(starCount * 3);
+        for (let i = 0; i < starCount; i++) {
+            const radius = 100 + Math.random() * 80;
+            const theta = Math.random() * Math.PI * 2;
+            const phi = Math.acos(2 * Math.random() - 1);
+            starPositions[i*3] = radius * Math.sin(phi) * Math.cos(theta);
+            starPositions[i*3+1] = radius * Math.sin(phi) * Math.sin(theta);
+            starPositions[i*3+2] = radius * Math.cos(phi);
+        }
+        starGeometry.setAttribute('position', new THREE.BufferAttribute(starPositions, 3));
+        const starMaterial = new THREE.PointsMaterial({ color: 0xffffff, size: 0.25, transparent: true, opacity: 0.7 });
+        const stars = new THREE.Points(starGeometry, starMaterial);
+        scene.add(stars);
+        
+        // --- Partikel Love ---
+        function createHeartTexture() {
+            const canvas = document.createElement('canvas');
+            canvas.width = 32;
+            canvas.height = 32;
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, 32, 32);
+            ctx.fillStyle = '#ff3366';
+            ctx.beginPath();
+            const x = 16, y = 16, size = 12;
+            ctx.moveTo(x, y + size/3);
+            ctx.bezierCurveTo(x, y - size/2, x - size, y - size/2, x - size, y + size/3);
+            ctx.bezierCurveTo(x - size, y + size, x, y + size*1.2, x, y + size*1.2);
+            ctx.bezierCurveTo(x, y + size*1.2, x + size, y + size, x + size, y + size/3);
+            ctx.bezierCurveTo(x + size, y - size/2, x, y - size/2, x, y + size/3);
+            ctx.fill();
+            ctx.fillStyle = '#ff99bb';
+            ctx.beginPath();
+            ctx.arc(x-4, y-2, 2, 0, Math.PI*2);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.arc(x+4, y-2, 2, 0, Math.PI*2);
+            ctx.fill();
+            return new THREE.CanvasTexture(canvas);
+        }
+        
+        const heartTexture = createHeartTexture();
+        const heartCount = 450;
+        const heartParticles = [];
+        const heartGroup = new THREE.Group();
+        scene.add(heartGroup);
+        
+        for (let i = 0; i < heartCount; i++) {
+            const material = new THREE.SpriteMaterial({ map: heartTexture, color: 0xff6699, transparent: true, opacity: 0.7 + Math.random() * 0.3 });
+            const sprite = new THREE.Sprite(material);
+            const radiusSpread = 4.5;
+            const x = (Math.random() - 0.5) * radiusSpread * 2;
+            const y = (Math.random() - 0.5) * radiusSpread * 1.5 + 0.5;
+            const z = (Math.random() - 0.5) * radiusSpread;
+            sprite.position.set(x, y, z);
+            sprite.scale.set(0.22, 0.22, 1);
+            heartGroup.add(sprite);
+            heartParticles.push({
+                obj: sprite,
+                vel: new THREE.Vector3((Math.random() - 0.5) * 0.008, (Math.random() - 0.5) * 0.008 + 0.005, (Math.random() - 0.5) * 0.008),
+                initPos: new THREE.Vector3(x, y, z),
+            });
+        }
+        
+        // --- Kelopak Bunga ---
+        function createPetalTexture() {
+            const canvas = document.createElement('canvas');
+            canvas.width = 32;
+            canvas.height = 32;
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, 32, 32);
+            ctx.fillStyle = '#ffb7c5';
+            ctx.beginPath();
+            ctx.ellipse(16, 16, 8, 12, 0, 0, Math.PI*2);
+            ctx.fill();
+            ctx.fillStyle = '#ff7b9c';
+            ctx.beginPath();
+            ctx.ellipse(16, 12, 5, 7, 0, 0, Math.PI*2);
+            ctx.fill();
+            ctx.fillStyle = '#ff4d6d';
+            ctx.beginPath();
+            ctx.ellipse(16, 8, 3, 4, 0, 0, Math.PI*2);
+            ctx.fill();
+            return new THREE.CanvasTexture(canvas);
+        }
+        
+        const petalTexture = createPetalTexture();
+        const petalCount = 600;
+        const petals = [];
+        const petalGroup = new THREE.Group();
+        scene.add(petalGroup);
+        
+        for (let i = 0; i < petalCount; i++) {
+            const material = new THREE.SpriteMaterial({ map: petalTexture, color: 0xffaabb, transparent: true, opacity: 0.6 + Math.random() * 0.4 });
+            const petalSprite = new THREE.Sprite(material);
+            const range = 7;
+            petalSprite.position.set((Math.random() - 0.5) * range * 1.8, (Math.random() - 0.5) * range + 1, (Math.random() - 0.5) * range);
+            petalSprite.scale.set(0.2, 0.25, 1);
+            petalGroup.add(petalSprite);
+            petals.push({
+                obj: petalSprite,
+                vel: new THREE.Vector3((Math.random() - 0.5) * 0.006, (Math.random() * 0.01 + 0.003), (Math.random() - 0.5) * 0.006),
+                rotSpeed: (Math.random() - 0.5) * 0.02
+            });
+        }
+        
+        // --- 3D LOVE HEART ---
+        const heartPointCount = 2800;
+        const heartPointsGeo = new THREE.BufferGeometry();
+        const heartVertices = [];
+        for (let i = 0; i < heartPointCount; i++) {
+            const t = Math.random() * Math.PI * 2;
+            const scale = 0.22;
+            const x = 16 * Math.pow(Math.sin(t), 3);
+            let yRaw = 13 * Math.cos(t) - 5 * Math.cos(2*t) - 2*Math.cos(3*t) - Math.cos(4*t);
+            const z = (Math.random() - 0.5) * 2.2;
+            const px = x * scale;
+            const py = yRaw * scale - 0.2;
+            const pz = z * 0.8;
+            heartVertices.push(px, py, pz);
+        }
+        heartPointsGeo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(heartVertices), 3));
+        const heartPointsMat = new THREE.PointsMaterial({ color: 0xff3366, size: 0.05, transparent: true, blending: THREE.AdditiveBlending });
+        const heartCloud = new THREE.Points(heartPointsGeo, heartPointsMat);
+        scene.add(heartCloud);
+        
+        // Heart outline
+        const heartCurvePoints = [];
+        for (let t = 0; t <= Math.PI * 2; t += 0.05) {
+            const x = 16 * Math.pow(Math.sin(t), 3);
+            const y = 13 * Math.cos(t) - 5 * Math.cos(2*t) - 2*Math.cos(3*t) - Math.cos(4*t);
+            heartCurvePoints.push(new THREE.Vector3(x * 0.22, y * 0.22 - 0.2, 0));
+        }
+        const heartLineGeo = new THREE.BufferGeometry().setFromPoints(heartCurvePoints);
+        const heartLineMat = new THREE.LineBasicMaterial({ color: 0xff6699 });
+        const heartOutline = new THREE.LineLoop(heartLineGeo, heartLineMat);
+        scene.add(heartOutline);
+        
+        const glowPoints = heartCurvePoints.map(p => p.clone().multiplyScalar(1.08));
+        const glowGeo = new THREE.BufferGeometry().setFromPoints(glowPoints);
+        const glowMat = new THREE.LineBasicMaterial({ color: 0xff99cc, transparent: true, opacity: 0.3 });
+        const glowOutline = new THREE.LineLoop(glowGeo, glowMat);
+        scene.add(glowOutline);
+        
+        // ========== KONFIGURASI GAMBAR ==========
+        const GAMBAR_URL = '1.jpg';
+        const CAPTION_TEXT = '✨ Love Universe ✨';
+        const FOTO_LEBAR = '220px';
+        const FOTO_TINGGI = '160px';
+        
+        const photoDiv = document.createElement('div');
+        photoDiv.style.backgroundColor = 'rgba(255,245,240,0.95)';
+        photoDiv.style.borderRadius = '20px';
+        photoDiv.style.padding = '8px';
+        photoDiv.style.boxShadow = '0 10px 30px rgba(0,0,0,0.5), 0 0 0 4px #ff99bb, 0 0 0 8px rgba(255,80,120,0.3)';
+        photoDiv.style.backdropFilter = 'blur(2px)';
+        photoDiv.style.textAlign = 'center';
+        photoDiv.style.fontFamily = 'inherit';
+        
+        const img = document.createElement('img');
+        img.src = GAMBAR_URL;
+        img.alt = 'Love Foto';
+        img.style.width = FOTO_LEBAR;
+        img.style.height = FOTO_TINGGI;
+        img.style.borderRadius = '16px';
+        img.style.objectFit = 'cover';
+        img.style.border = '2px solid white';
+        
+        img.onerror = () => { 
+            console.warn('Gambar tidak ditemukan, menggunakan placeholder');
+            img.src = 'https://via.placeholder.com/300x200/ff6699/white?text=❤️+Ganti+Gambar+Anda+❤️';
+            img.style.objectFit = 'contain';
+        };
+        
+        const caption = document.createElement('div');
+        caption.innerText = CAPTION_TEXT;
+        caption.style.fontWeight = 'bold';
+        caption.style.marginTop = '6px';
+        caption.style.color = '#b13b5a';
+        caption.style.fontSize = '14px';
+        caption.style.letterSpacing = '1px';
+        
+        photoDiv.appendChild(img);
+        photoDiv.appendChild(caption);
+        
+        const photoLabel = new CSS2DObject(photoDiv);
+        photoLabel.position.set(0, 0.2, 0.8);
+        scene.add(photoLabel);
+        
+        // Teks floating LOVE
+        const loveTextDiv = document.createElement('div');
+        loveTextDiv.textContent = '💗  LOVE  💗';
+        loveTextDiv.style.color = '#ff80a5';
+        loveTextDiv.style.fontSize = '20px';
+        loveTextDiv.style.fontWeight = 'bold';
+        loveTextDiv.style.textShadow = '0 0 10px red';
+        loveTextDiv.style.background = 'rgba(0,0,0,0.4)';
+        loveTextDiv.style.padding = '4px 12px';
+        loveTextDiv.style.borderRadius = '40px';
+        loveTextDiv.style.backdropFilter = 'blur(5px)';
+        const loveTextObj = new CSS2DObject(loveTextDiv);
+        loveTextObj.position.set(0, 1.4, 0.4);
+        scene.add(loveTextObj);
+        
+        // --- Efek tambahan ---
+        const glowGeometry = new THREE.BufferGeometry();
+        const glowCount = 800;
+        const glowPositions = new Float32Array(glowCount * 3);
+        for (let i = 0; i < glowCount; i++) {
+            const angle = Math.random() * Math.PI * 2;
+            const rad = 2 + Math.random() * 3.5;
+            glowPositions[i*3] = Math.cos(angle) * rad;
+            glowPositions[i*3+1] = Math.sin(angle) * rad * 0.8 + 0.2;
+            glowPositions[i*3+2] = (Math.random() - 0.5) * 2.5;
+        }
+        glowGeometry.setAttribute('position', new THREE.BufferAttribute(glowPositions, 3));
+        const glowPointsMat2 = new THREE.PointsMaterial({ color: 0xffaa88, size: 0.03, transparent: true, blending: THREE.AdditiveBlending });
+        const glowDust = new THREE.Points(glowGeometry, glowPointsMat2);
+        scene.add(glowDust);
+        
+        const ringGeo = new THREE.TorusGeometry(1.2, 0.04, 64, 200);
+        const ringMat = new THREE.MeshStandardMaterial({ color: 0xff77aa, emissive: 0x441122, emissiveIntensity: 0.6 });
+        const ring = new THREE.Mesh(ringGeo, ringMat);
+        ring.position.set(0, 0.1, 0);
+        scene.add(ring);
+        
+        const ringGeo2 = new THREE.TorusGeometry(1.55, 0.03, 64, 200);
+        const ringMat2 = new THREE.MeshStandardMaterial({ color: 0xffaacc, emissive: 0x331111, emissiveIntensity: 0.4 });
+        const ring2 = new THREE.Mesh(ringGeo2, ringMat2);
+        ring2.position.set(0, 0.1, 0);
+        scene.add(ring2);
+        
+        // --- Pencahayaan ---
+        const ambientLight = new THREE.AmbientLight(0x222222);
+        scene.add(ambientLight);
+        const mainLight = new THREE.DirectionalLight(0xffccaa, 1);
+        mainLight.position.set(2, 5, 3);
+        scene.add(mainLight);
+        const backLight = new THREE.PointLight(0xff5599, 0.5);
+        backLight.position.set(-1, 1, -2);
+        scene.add(backLight);
+        const fillLight = new THREE.PointLight(0x88aaff, 0.4);
+        fillLight.position.set(1, 2, 2);
+        scene.add(fillLight);
+        const heartGlow = new THREE.PointLight(0xff3366, 0.8, 8);
+        heartGlow.position.set(0, 0, 0.5);
+        scene.add(heartGlow);
+        
+        // ========== TOMBOL AMPLOP LOVE & ANIMASI I LOVE YOU HOLLY ==========
+        const envelopeBtn = document.getElementById('loveEnvelopeBtn');
+        const messageOverlay = document.getElementById('messageOverlay');
+        
+        // Efek partikel hati berjatuhan saat tombol diklik
+        function createFloatingHearts() {
+            for (let i = 0; i < 50; i++) {
+                const heartDiv = document.createElement('div');
+                heartDiv.innerHTML = '❤️';
+                heartDiv.style.position = 'fixed';
+                heartDiv.style.fontSize = (20 + Math.random() * 30) + 'px';
+                heartDiv.style.left = Math.random() * window.innerWidth + 'px';
+                heartDiv.style.top = window.innerHeight + 'px';
+                heartDiv.style.zIndex = '1001';
+                heartDiv.style.pointerEvents = 'none';
+                heartDiv.style.opacity = '1';
+                heartDiv.style.transition = 'all 3s ease-out';
+                document.body.appendChild(heartDiv);
+                
+                // Animasi naik ke atas
+                setTimeout(() => {
+                    heartDiv.style.transform = `translateY(-${window.innerHeight + 100}px) rotate(${Math.random() * 360}deg)`;
+                    heartDiv.style.opacity = '0';
+                }, 10);
+                
+                // Hapus setelah animasi selesai
+                setTimeout(() => {
+                    heartDiv.remove();
+                }, 3000);
+            }
+        }
+        
+        // Efek zoom pada kamera (transisi 3D)
+        let isAnimating = false;
+        const originalCameraPos = camera.position.clone();
+        const originalTarget = controls.target.clone();
+        
+        function animateCameraToMessage() {
+            if (isAnimating) return;
+            isAnimating = true;
+            
+            // Simpan posisi awal
+            const startPos = camera.position.clone();
+            const startTarget = controls.target.clone();
+            const endPos = new THREE.Vector3(0, 1, 3);
+            const endTarget = new THREE.Vector3(0, 0.5, 0);
+            let progress = 0;
+            
+            function step() {
+                progress += 0.05;
+                if (progress >= 1) {
+                    camera.position.copy(endPos);
+                    controls.target.copy(endTarget);
+                    controls.update();
+                    isAnimating = false;
+                    // Tampilkan overlay pesan
+                    messageOverlay.classList.add('active');
+                    createFloatingHearts();
+                    return;
+                }
+                
+                // Easing function
+                const ease = 1 - Math.pow(1 - progress, 3);
+                camera.position.lerpVectors(startPos, endPos, ease);
+                controls.target.lerpVectors(startTarget, endTarget, ease);
+                controls.update();
+                requestAnimationFrame(step);
+            }
+            
+            requestAnimationFrame(step);
+        }
+        
+        function resetCameraAfterMessage() {
+            if (isAnimating) return;
+            isAnimating = true;
+            
+            const startPos = camera.position.clone();
+            const startTarget = controls.target.clone();
+            const endPos = originalCameraPos;
+            const endTarget = originalTarget;
+            let progress = 0;
+            
+            function step() {
+                progress += 0.05;
+                if (progress >= 1) {
+                    camera.position.copy(endPos);
+                    controls.target.copy(endTarget);
+                    controls.update();
+                    isAnimating = false;
+                    return;
+                }
+                
+                const ease = 1 - Math.pow(1 - progress, 3);
+                camera.position.lerpVectors(startPos, endPos, ease);
+                controls.target.lerpVectors(startTarget, endTarget, ease);
+                controls.update();
+                requestAnimationFrame(step);
+            }
+            
+            requestAnimationFrame(step);
+        }
+        
+        // Event klik tombol amplop
+        envelopeBtn.addEventListener('click', () => {
+            animateCameraToMessage();
+            
+            // Efek tambahan: ubah warna heart glow
+            heartGlow.intensity = 1.5;
+            setTimeout(() => {
+                heartGlow.intensity = 0.8;
+            }, 1000);
+            
+            // Efek partikel kelopak extra
+            for (let i = 0; i < 30; i++) {
+                setTimeout(() => {
+                    petals.forEach(p => {
+                        if (Math.random() > 0.7) {
+                            p.vel.y += 0.02;
+                        }
+                    });
+                }, i * 50);
+            }
+        });
+        
+        // Event klik overlay untuk menutup dan reset kamera
+        messageOverlay.addEventListener('click', () => {
+            messageOverlay.classList.remove('active');
+            resetCameraAfterMessage();
+        });
+        
+        // ========== AKHIR TOMBOL AMPLOP ==========
+        
+        // --- Animasi ---
+        let time = 0;
+        
+        function animateParticles() {
+            time += 0.012;
+            
+            heartParticles.forEach(p => {
+                p.obj.position.x += p.vel.x;
+                p.obj.position.y += p.vel.y;
+                p.obj.position.z += p.vel.z;
+                if (Math.abs(p.obj.position.x) > 3.8 || p.obj.position.y > 2.5 || p.obj.position.y < -1.2 || Math.abs(p.obj.position.z) > 2.5) {
+                    p.obj.position.copy(p.initPos);
+                }
+                p.obj.material.opacity = 0.6 + Math.sin(time * 1.5 + p.initPos.x) * 0.3;
+            });
+            
+            petals.forEach(p => {
+                p.obj.position.x += p.vel.x;
+                p.obj.position.y += p.vel.y;
+                p.obj.position.z += p.vel.z;
+                p.obj.material.rotation += p.rotSpeed;
+                if (p.obj.position.y > 2.7 || p.obj.position.y < -1.8 || Math.abs(p.obj.position.x) > 4.5) {
+                    p.obj.position.set((Math.random() - 0.5) * 6, 2.0 + Math.random() * 1.5, (Math.random() - 0.5) * 5);
+                    p.vel.set((Math.random() - 0.5) * 0.008, -0.008 - Math.random() * 0.01, (Math.random() - 0.5) * 0.008);
+                }
+                p.vel.y -= 0.0004;
+                if (p.vel.y < -0.02) p.vel.y = -0.008;
+            });
+            
+            ring.rotation.z += 0.008;
+            ring2.rotation.x += 0.005;
+            ring2.rotation.z -= 0.003;
+            heartCloud.rotation.y = Math.sin(time * 0.2) * 0.1;
+            heartOutline.rotation.z = Math.sin(time * 0.3) * 0.05;
+            glowOutline.rotation.z = Math.sin(time * 0.3) * 0.05;
+            stars.rotation.y += 0.0005;
+            stars.rotation.x += 0.0003;
+            
+            const intensity = 0.7 + Math.sin(time * 3) * 0.3;
+            heartGlow.intensity = intensity;
+            
+            photoLabel.position.y = 0.2 + Math.sin(time * 2) * 0.02;
+            loveTextObj.position.y = 1.42 + Math.sin(time * 2.2) * 0.01;
+        }
+        
+        function animate() {
+            requestAnimationFrame(animate);
+            animateParticles();
+            controls.update();
+            renderer.render(scene, camera);
+            labelRenderer.render(scene, camera);
+        }
+        animate();
+        
+        window.addEventListener('resize', onWindowResize, false);
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            labelRenderer.setSize(window.innerWidth, window.innerHeight);
+        }
+        
+        document.getElementById('backDashboard').addEventListener('click', (e) => {
+            console.log('Navigating to dashboard...');
+        });
+        
+        console.log('Love 3D Universe | Tombol Amplop Love siap! Klik untuk I Love You Holly');
+    </script>
+</body>
+</html>

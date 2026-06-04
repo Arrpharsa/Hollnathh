@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>hollnath Studio Booth | 3 Foto Strip</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', 'Segoe UI', system-ui, sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
+            min-height: 100vh;
+            color: #fff;
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap');
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 30px 20px;
+            background: rgba(255, 107, 157, 0.1);
+            border-radius: 50px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, #FF6B9D, #FFD166);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .badge {
+            background: #00ff88;
+            color: #000;
+            padding: 5px 15px;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            display: inline-block;
+            margin-top: 10px;
+        }
+
+        .booth-layout {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+
+        .camera-panel {
+            flex: 2;
+            min-width: 350px;
+            background: rgba(0,0,0,0.5);
+            border-radius: 30px;
+            padding: 20px;
+            backdrop-filter: blur(5px);
+        }
+
+        .camera-box {
+            position: relative;
+            background: #000;
+            border-radius: 20px;
+            overflow: hidden;
+            aspect-ratio: 3 / 4;
+        }
+
+        video, canvas {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .countdown-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            backdrop-filter: blur(5px);
+        }
+
+        .countdown-number {
+            font-size: 100px;
+            font-weight: bold;
+            color: #FFD166;
+            text-shadow: 0 0 20px #FF6B9D;
+        }
+
+        .countdown-step {
+            font-size: 24px;
+            color: white;
+            margin-top: 20px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 28px;
+            border: none;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: inherit;
+        }
+
+        .btn-primary {
+            background: #FF6B9D;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #ff4d82;
+            transform: scale(1.02);
+        }
+
+        .btn-marah {
+            background: #FFD166;
+            color: #1a1a2e;
+        }
+
+        .strip-panel {
+            flex: 1.2;
+            min-width: 300px;
+            background: rgba(30,30,50,0.7);
+            border-radius: 30px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        .strip-title {
+            text-align: center;
+            margin-bottom: 15px;
+            color: #FFD166;
+        }
+
+        /* 3 Foto Strip */
+        .photo-strip {
+            background: #fff;
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .strip-3foto {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .strip-3foto img {
+            width: 100%;
+            border-radius: 10px;
+            aspect-ratio: 3/4;
+            object-fit: cover;
+        }
+
+        .strip-caption {
+            text-align: center;
+            font-size: 12px;
+            color: #333;
+            font-weight: bold;
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px solid #ddd;
+        }
+
+        .filter-controls, .bg-controls {
+            margin-top: 15px;
+        }
+
+        .filter-controls h4, .bg-controls h4 {
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+            color: #FFD166;
+        }
+
+        .filter-buttons, .bg-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .filter-btn, .bg-btn {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            border: none;
+            cursor: pointer;
+            background: #2a2a3a;
+            color: white;
+            transition: all 0.2s;
+        }
+
+        .filter-btn.active, .bg-btn.active {
+            background: #FF6B9D;
+            color: white;
+            box-shadow: 0 0 8px #FF6B9D;
+        }
+
+        .filter-btn:hover, .bg-btn:hover {
+            background: #FF6B9D;
+        }
+
+        .download-btn {
+            width: 100%;
+            margin-top: 15px;
+            background: #00aa66;
+        }
+
+        .progress-bar {
+            margin-top: 15px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 10px;
+            height: 8px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            width: 0%;
+            height: 100%;
+            background: #FF6B9D;
+            transition: width 0.3s ease;
+            border-radius: 10px;
+        }
+
+        .status-text {
+            text-align: center;
+            font-size: 0.8rem;
+            margin-top: 10px;
+            color: #FFD166;
+        }
+
+        .history-strips {
+            margin-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.2);
+            padding-top: 15px;
+        }
+
+        .history-item {
+            display: inline-block;
+            width: 60px;
+            margin: 5px;
+            cursor: pointer;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 2px solid transparent;
+        }
+
+        .history-item:hover {
+            border-color: #FF6B9D;
+        }
+
+        .history-item img {
+            width: 100%;
+            aspect-ratio: 3/4;
+            object-fit: cover;
+        }
+
+        .komentar-section {
+            margin-top: 30px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 20px;
+            padding: 15px;
+        }
+
+        .komentar-bubble {
+            display: inline-block;
+            background: rgba(255,107,157,0.2);
+            padding: 5px 12px;
+            border-radius: 20px;
+            margin: 5px;
+            font-size: 0.8rem;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            font-size: 0.7rem;
+            color: #888;
+        }
+
+        @keyframes flash {
+            0% { opacity: 1; }
+            50% { background: white; }
+            100% { opacity: 1; }
+        }
+
+        .flash-effect {
+            animation: flash 0.2s ease;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="hero">
+        <h1>📸 HOLLNATH PHOTOBOOTH</h1>
+    </div>
+
+    <div class="booth-layout">
+        <div class="camera-panel">
+            <div class="camera-box" id="cameraBox">
+                <video id="video" autoplay playsinline></video>
+                <canvas id="canvas" style="display: none;"></canvas>
+                <div id="countdownOverlay" class="countdown-overlay hidden">
+                    <div class="countdown-number" id="countdownNumber">3</div>
+                    <div class="countdown-step" id="countdownStep">Foto ke-1</div>
+                </div>
+            </div>
+            <div class="btn-group">
+                <button class="btn btn-primary" id="startBtn">🎬 Mulai 3 Foto (3 detik/foto)</button>
+                <button class="btn btn-marah" id="marahModeBtn">😤 Holly versi marah (when yh)</button>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="status-text" id="statusText">Siap foto 3 posisi berbeda!</div>
+            <p style="text-align: center; margin-top: 10px; font-size: 0.75rem;">⚡ 3 detik per foto | Ganti pose setiap jepretan | Langsung jadi 1 strip</p>
+        </div>
+
+        <div class="strip-panel">
+            <h3 class="strip-title">🎞️ PHOTO STRIP (3 FOTO)</h3>
+            <div id="photoStripContainer">
+                <div style="text-align: center; color: #aaa; padding: 40px;">Belum ada foto.<br>Klik "Mulai 3 Foto"!</div>
+            </div>
+
+            <div class="filter-controls">
+                <h4>🎨 Filter Efek untuk Strip</h4>
+                <div class="filter-buttons" id="filterButtons">
+                    <button class="filter-btn active" data-filter="none">Normal</button>
+                    <button class="filter-btn" data-filter="grayscale">Grayscale</button>
+                    <button class="filter-btn" data-filter="sepia">Sepia</button>
+                    <button class="filter-btn" data-filter="vintage">Vintage</button>
+                    <button class="filter-btn" data-filter="bright">Bright</button>
+                    <button class="filter-btn" data-filter="contrast">High Contrast</button>
+                </div>
+            </div>
+
+            <div class="bg-controls">
+                <h4>🎨 Background Color Strip</h4>
+                <div class="bg-buttons" id="bgButtons">
+                    <button class="bg-btn active" data-bg="#ffffff">Putih</button>
+                    <button class="bg-btn" data-bg="#FF6B9D">Pink Bonbon</button>
+                    <button class="bg-btn" data-bg="#FFD166">Kuning Marah</button>
+                    <button class="bg-btn" data-bg="#2a2a3a">Dark Mode</button>
+                    <button class="bg-btn" data-bg="#8B0000">Merah When YH</button>
+                </div>
+            </div>
+
+            <button class="btn download-btn" id="downloadStripBtn">📥 Download Strip (3 Foto)</button>
+
+            <div class="history-strips">
+                <h4>📚 Riwayat Strip</h4>
+                <div id="historyList"></div>
+            </div>
+        </div>
+    </div>
+
+    
+
+<script>
+    const video = document.getElementById('video');
+    const canvas = document.getElementById('canvas');
+    const countdownOverlay = document.getElementById('countdownOverlay');
+    const countdownNumber = document.getElementById('countdownNumber');
+    const countdownStep = document.getElementById('countdownStep');
+    const startBtn = document.getElementById('startBtn');
+    const marahModeBtn = document.getElementById('marahModeBtn');
+    const stripContainer = document.getElementById('photoStripContainer');
+    const downloadStripBtn = document.getElementById('downloadStripBtn');
+    const historyListDiv = document.getElementById('historyList');
+    const progressFill = document.getElementById('progressFill');
+    const statusText = document.getElementById('statusText');
+
+    let stream = null;
+    let currentFilter = 'none';
+    let currentBgColor = '#ffffff';
+    let marahFlag = false;
+    let stripHistory = [];
+    let isShooting = false;
+
+    // Menyimpan 3 foto sementara
+    let capturedPhotos = []; // array of dataURL
+
+    // Buat strip dengan 3 foto
+    async function createTriplePhotoStrip(photos, filter, bgColor, isMarah) {
+        return new Promise((resolve) => {
+            const stripWidth = 350;
+            const stripHeight = 600;
+            const stripCanvas = document.createElement('canvas');
+            stripCanvas.width = stripWidth;
+            stripCanvas.height = stripHeight;
+            const ctx = stripCanvas.getContext('2d');
+
+            // Background
+            ctx.fillStyle = bgColor;
+            ctx.fillRect(0, 0, stripWidth, stripHeight);
+
+            const photoWidth = stripWidth - 40;
+            const photoHeight = (photoWidth * 4) / 3;
+            const photoX = 20;
+            const gap = 10;
+            let currentY = 30;
+
+            // Fungsi apply filter ke gambar
+            const applyFilterToImage = (imgElement, callback) => {
+                const tempCanvas = document.createElement('canvas');
+                tempCanvas.width = photoWidth;
+                tempCanvas.height = photoHeight;
+                const tempCtx = tempCanvas.getContext('2d');
+                tempCtx.drawImage(imgElement, 0, 0, photoWidth, photoHeight);
+                
+                if (filter !== 'none') {
+                    let imgData = tempCtx.getImageData(0, 0, photoWidth, photoHeight);
+                    let data = imgData.data;
+                    switch(filter) {
+                        case 'grayscale':
+                            for(let i=0;i<data.length;i+=4){
+                                let gray = data[i]*0.34 + data[i+1]*0.5 + data[i+2]*0.16;
+                                data[i]=data[i+1]=data[i+2]=gray;
+                            } break;
+                        case 'sepia':
+                            for(let i=0;i<data.length;i+=4){
+                                let r=data[i],g=data[i+1],b=data[i+2];
+                                data[i]=Math.min(255,r*0.393+g*0.769+b*0.189);
+                                data[i+1]=Math.min(255,r*0.349+g*0.686+b*0.168);
+                                data[i+2]=Math.min(255,r*0.272+g*0.534+b*0.131);
+                            } break;
+                        case 'vintage':
+                            for(let i=0;i<data.length;i+=4){
+                                data[i]=Math.min(255,data[i]*1.2);
+                                data[i+1]=Math.min(255,data[i+1]*1.1);
+                                data[i+2]=Math.min(255,data[i+2]*0.9);
+                            } break;
+                        case 'bright':
+                            for(let i=0;i<data.length;i+=4){
+                                data[i]=Math.min(255,data[i]+50);
+                                data[i+1]=Math.min(255,data[i+1]+50);
+                                data[i+2]=Math.min(255,data[i+2]+50);
+                            } break;
+                        case 'contrast':
+                            for(let i=0;i<data.length;i+=4){
+                                data[i]=Math.min(255,Math.max(0,(data[i]-128)*1.5+128));
+                                data[i+1]=Math.min(255,Math.max(0,(data[i+1]-128)*1.5+128));
+                                data[i+2]=Math.min(255,Math.max(0,(data[i+2]-128)*1.5+128));
+                            } break;
+                    }
+                    tempCtx.putImageData(imgData, 0, 0);
+                }
+                callback(tempCanvas);
+            };
+
+            let imagesLoaded = 0;
+            const photoElements = [];
+
+            for (let i = 0; i < photos.length; i++) {
+                const img = new Image();
+                img.onload = (function(idx) {
+                    return function() {
+                        applyFilterToImage(img, (filteredCanvas) => {
+                            photoElements[idx] = filteredCanvas;
+                            imagesLoaded++;
+                            if (imagesLoaded === photos.length) {
+                                // Gambar semua foto ke strip
+                                for (let j = 0; j < photoElements.length; j++) {
+                                    ctx.drawImage(photoElements[j], photoX, currentY, photoWidth, photoHeight);
+                                    currentY += photoHeight + gap;
+                                }
+                                
+                                // Tambahkan caption
+                                ctx.font = "bold 14px 'Poppins'";
+                                ctx.fillStyle = isMarah ? "#FF0000" : "#FF6B9D";
+                                ctx.fillText(isMarah ? "😤 MARAH MODE: WHEN YH 😤" : "✨ Bonboniep Photobooth ✨", 20, currentY + 5);
+                                
+                                ctx.font = "10px 'Poppins'";
+                                ctx.fillStyle = "#333";
+                                let caption = isMarah ? "#whenyh #kebal #fyp #3strip" : "i'm so lucky thank you my spiderman 🎄 #fyp #website #trend";
+                                ctx.fillText(caption, 20, currentY + 25);
+                                
+                                ctx.font = "italic 9px Poppins";
+                                ctx.fillStyle = "#555";
+                                let randomKomen = ["hmm kebal when yh", "marah part 200", "ga ada ak soft spoken", "kalimat keramat when yh", "nak waa"];
+                                let pilihKomen = randomKomen[Math.floor(Math.random()*randomKomen.length)];
+                                ctx.fillText(`💬 ${pilihKomen}`, 20, stripHeight - 15);
+                                
+                                resolve(stripCanvas.toDataURL('image/png'));
+                            }
+                        });
+                    };
+                })(i);
+                img.src = photos[i];
+            }
+        });
+    }
+
+    // Ambil 1 foto dari video
+    async function captureSinglePhoto() {
+        return new Promise((resolve) => {
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+            resolve(canvas.toDataURL('image/png'));
+        });
+    }
+
+    // Efek flash
+    function flashEffect() {
+        const cameraBox = document.getElementById('cameraBox');
+        cameraBox.classList.add('flash-effect');
+        setTimeout(() => cameraBox.classList.remove('flash-effect'), 200);
+    }
+
+    // Countdown untuk 1 foto
+    function countdownForPhoto(stepNum, totalSteps) {
+        return new Promise((resolve) => {
+            let count = 3;
+            countdownOverlay.classList.remove('hidden');
+            countdownNumber.innerHTML = count;
+            countdownStep.innerHTML = `Foto ke-${stepNum} dari ${totalSteps}`;
+            statusText.innerHTML = `📷 Persiapan foto ke-${stepNum}... ${count} detik`;
+            
+            const interval = setInterval(() => {
+                count--;
+                if (count >= 1) {
+                    countdownNumber.innerHTML = count;
+                    statusText.innerHTML = `📷 Foto ke-${stepNum}... ${count} detik`;
+                } else if (count === 0) {
+                    countdownNumber.innerHTML = "📸";
+                    countdownStep.innerHTML = "JEPRET!";
+                    statusText.innerHTML = `📸 Foto ke-${stepNum} berhasil!`;
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        countdownOverlay.classList.add('hidden');
+                        flashEffect();
+                        resolve();
+                    }, 400);
+                }
+            }, 1000);
+        });
+    }
+
+    // Proses utama: ambil 3 foto berturut-turut
+    async function startThreePhotoSession() {
+        if (isShooting) {
+            alert("Masih proses foto, tunggu selesai ya!");
+            return;
+        }
+        if (!stream || !video.videoWidth) {
+            alert("Kamera belum siap!");
+            return;
+        }
+
+        isShooting = true;
+        capturedPhotos = [];
+        startBtn.disabled = true;
+        marahModeBtn.disabled = true;
+        
+        for (let i = 1; i <= 3; i++) {
+            // Countdown 3 detik
+            await countdownForPhoto(i, 3);
+            // Ambil foto
+            const photoData = await captureSinglePhoto();
+            capturedPhotos.push(photoData);
+            // Update progress
+            const progress = (i / 3) * 100;
+            progressFill.style.width = `${progress}%`;
+            statusText.innerHTML = `✅ ${i}/3 foto berhasil! ${i === 3 ? 'Membuat strip...' : 'Siap ke foto berikutnya!'}`;
+            
+            // Kasih jeda sedikit antar foto
+            if (i < 3) {
+                await new Promise(r => setTimeout(r, 800));
+                statusText.innerHTML = `🔄 Ganti pose untuk foto ke-${i+1}...`;
+            }
+        }
+        
+        statusText.innerHTML = "🎨 Membuat photo strip 3 foto...";
+        
+        // Buat strip dengan 3 foto
+        const finalStrip = await createTriplePhotoStrip(capturedPhotos, currentFilter, currentBgColor, marahFlag);
+        
+        // Tampilkan di container
+        stripContainer.innerHTML = `
+            <div class="photo-strip" style="background: ${currentBgColor};">
+                <div class="strip-3foto">
+                    <img src="${capturedPhotos[0]}" alt="foto 1">
+                    <img src="${capturedPhotos[1]}" alt="foto 2">
+                    <img src="${capturedPhotos[2]}" alt="foto 3">
+                </div>
+                <div class="strip-caption">
+                    ${marahFlag ? '😤 WHEN YH MODE 😤' : '✨ Bonboniep Photobooth ✨'}
+                </div>
+            </div>
+        `;
+        
+        // Simpan ke history (simpan data strip final)
+        stripHistory.unshift(finalStrip);
+        if (stripHistory.length > 6) stripHistory.pop();
+        updateHistory();
+        
+        statusText.innerHTML = "🎉 Selesai! 3 foto jadi 1 strip. Download atau foto lagi!";
+        progressFill.style.width = "100%";
+        setTimeout(() => {
+            progressFill.style.width = "0%";
+        }, 2000);
+        
+        isShooting = false;
+        startBtn.disabled = false;
+        marahModeBtn.disabled = false;
+        
+        // Reset marah flag setelah selesai (opsional)
+        if (marahFlag) {
+            setTimeout(() => {
+                marahFlag = false;
+                statusText.innerHTML = "Mode marah selesai. Kembali ke mode normal.";
+            }, 1000);
+        }
+    }
+
+    function updateHistory() {
+        if (stripHistory.length === 0) {
+            historyListDiv.innerHTML = '<p style="color:#aaa; font-size:12px;">Belum ada riwayat</p>';
+            return;
+        }
+        historyListDiv.innerHTML = stripHistory.map((data, idx) => `
+            <div class="history-item" onclick="loadHistoryStrip(${idx})">
+                <img src="${data}" alt="history strip">
+            </div>
+        `).join('');
+    }
+
+    window.loadHistoryStrip = function(idx) {
+        const stripData = stripHistory[idx];
+        stripContainer.innerHTML = `
+            <div class="photo-strip" style="background: ${currentBgColor};">
+                <img src="${stripData}" alt="photo strip" style="width:100%; border-radius:12px;">
+            </div>
+        `;
+    };
+
+    async function initCamera() {
+        try {
+            if (stream) stream.getTracks().forEach(t => t.stop());
+            stream = await navigator.mediaDevices.getUserMedia({ video: true });
+            video.srcObject = stream;
+            await video.play();
+            statusText.innerHTML = "'";
+        } catch (err) {
+            alert("Akses kamera diperlukan untuk photobooth!");
+            statusText.innerHTML = "❌ Kamera tidak dapat diakses";
+        }
+    }
+
+    // Event Listeners
+    startBtn.addEventListener('click', () => {
+        startThreePhotoSession();
+    });
+    
+    marahModeBtn.addEventListener('click', () => {
+        marahFlag = true;
+        statusText.innerHTML = "😤 MARAH MODE AKTIF! Hasil strip pakai gaya 'WHEN YH'";
+        setTimeout(() => {
+            if (!isShooting) {
+                marahFlag = false;
+                statusText.innerHTML = "Mode marah selesai (5 detik). Klik lagi kalau mau marah lagi.";
+            }
+        }, 5000);
+    });
+    
+    downloadStripBtn.addEventListener('click', () => {
+        if (stripHistory.length === 0 && capturedPhotos.length === 0) {
+            alert("Belum ada foto strip! Klik 'Mulai 3 Foto' dulu.");
+            return;
+        }
+        // Download strip terbaru
+        if (stripHistory.length > 0) {
+            const link = document.createElement('a');
+            link.download = `bonboniep_strip_3foto_${Date.now()}.png`;
+            link.href = stripHistory[0];
+            link.click();
+        } else {
+            // fallback: buat ulang dari capturedPhotos
+            alert("Tunggu sebentar, strip sedang diproses");
+        }
+    });
+    
+    // Filter & Background
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            currentFilter = btn.dataset.filter;
+            statusText.innerHTML = `Filter berubah ke: ${currentFilter} (berlaku untuk foto selanjutnya)`;
+        });
+    });
+    
+    document.querySelectorAll('.bg-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.bg-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            currentBgColor = btn.dataset.bg;
+            statusText.innerHTML = `Background strip berubah!`;
+            // Update background strip yang sedang tampil
+            const stripDiv = document.querySelector('.photo-strip');
+            if (stripDiv) stripDiv.style.background = currentBgColor;
+        });
+    });
+    
+    initCamera();
+</script>
+</body>
+</html>

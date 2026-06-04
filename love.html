@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Love Letter untuk Holly</title>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Dancing Script', 'Poppins', cursive;
+        background: linear-gradient(135deg, #ff9abe 0%, #ff6b9d 50%, #e91e63 100%);
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 40px 20px;
+        position: relative;
+        overflow-x: hidden;
+    }
+
+    .falling-flowers {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 1;
+        overflow: hidden;
+    }
+
+    .flower {
+        position: absolute;
+        color: rgba(255,255,255,0.7);
+        font-size: 20px;
+        animation: fall linear infinite;
+        opacity: 0;
+    }
+
+    @keyframes fall {
+        0% { transform: translateY(-10vh) rotate(0deg); opacity: 1; }
+        100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+    }
+
+    .letter-container {
+        position: relative;
+        z-index: 2;
+        max-width: 700px;
+        width: 100%;
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 30px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        overflow: hidden;
+        animation: slideUp 0.8s ease;
+    }
+
+    @keyframes slideUp {
+        from { opacity: 0; transform: translateY(50px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .letter-header {
+        background: linear-gradient(135deg, #e91e63, #ff6b9d);
+        padding: 30px;
+        text-align: center;
+        color: white;
+    }
+
+    .letter-header h1 {
+        font-size: 2.5rem;
+        margin-bottom: 10px;
+        animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+    }
+
+    .letter-body {
+        padding: 40px;
+        background: #fff9fb;
+    }
+
+    .typing-container {
+        min-height: 400px;
+        background: #fff0f4;
+        padding: 30px;
+        border-radius: 20px;
+    }
+
+    .letter-content {
+        font-family: 'Dancing Script', cursive;
+        font-size: 1.4rem;
+        line-height: 1.8;
+        color: #4a2a3a;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+    }
+
+    .cursor {
+        display: inline-block;
+        width: 3px;
+        height: 1.4rem;
+        background-color: #e91e63;
+        margin-left: 4px;
+        animation: blink 1s infinite;
+        vertical-align: middle;
+    }
+
+    @keyframes blink {
+        0%, 50% { opacity: 1; }
+        51%, 100% { opacity: 0; }
+    }
+
+    .hearts {
+        text-align: center;
+        margin-top: 30px;
+        font-size: 2rem;
+        animation: heartbeat 1.5s infinite;
+    }
+
+    @keyframes heartbeat {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.2); }
+    }
+
+    .letter-footer {
+        background: #ffe0e8;
+        padding: 20px;
+        text-align: center;
+        color: #e91e63;
+    }
+
+    .music-note {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background: rgba(255,255,255,0.9);
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        cursor: pointer;
+        z-index: 10;
+        animation: spin 4s linear infinite;
+    }
+
+    @keyframes spin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+    }
+
+    @media (max-width: 600px) {
+        .letter-body { padding: 20px; }
+        .letter-content { font-size: 1.1rem; }
+        .letter-header h1 { font-size: 1.8rem; }
+    }
+</style>
+</head>
+<body>
+
+<div class="falling-flowers" id="fallingFlowers"></div>
+<div class="music-note" id="musicNote">🎵</div>
+
+<div class="letter-container">
+    <div class="letter-header">
+        <h1>For you </h1>
+    </div>
+    <div class="letter-body">
+        <div class="typing-container">
+            <div class="letter-content" id="letterContent"></div>
+            <div class="hearts" id="hearts">💖</div>
+        </div>
+    </div>
+    <div class="letter-footer">
+    </div>
+</div>
+
+<script>
+const loveLetterText = `Hai Holl,
+
+hmm, aku cuma mau bilang holl.
+
+Masih inget ga? waktu pertama kali aku jemput kamu ke depok haha, padahal itu posisinya itu jam 3 pagi dan dadakan banget loh.
+
+Sejak pertama kali lihat kamu di depok, posisinya kamu lagi pake jaket putih dan celana panjang di hari senin pagi itu, rambutmu agak berantakan dan berwarna kuning tapi kamu tetep cantik. Jujur, waktu itu jantung aku berdegus kenceng banget.
+
+Tapi pada saat itu aku belum ber eskpetasi bahwa aku akan sesayang itu sama kamu haha.
+
+Di perjalanan kita ke bandung itu seru banget lalu kita mampir di puncak pas sambil makan indomie rebus, lalu kita lanjutin perjalanan sambil sharing tws dengerin music haha jujur lucu sihh..
+
+Lalu setibanya di bandung aku canggung harus berbuat apa holl, disana kita akward banget wajar sih namanya juga first meet yang tak terduga .
+
+Beberapa hari berlalu aku mulai merasakan tumbuhnya perasaan nyaman di dekat kamu holl, tapi aku bingung maksud dari perasaan itu apaa.
+
+Dan di hari sabtu tanggal 16 mei 2026 kamu pulang ke depok di jam 13.00 siang, disana aku merasa sangat sedih merasa kehilangan dan muncul kebingungan kenapa aku bisa ngerasain hal ini.
+
+Aku bertanya - tanya kenapa aku bisa merasain hal ini lalu untuk mendapatkan jawaban aku ngajak kamu lagi ke bandung di hari rabu tanggal 20 mei 2026 di jam 16.30 aku jemput kamuu di kota bandung.
+
+Di minggu ke dua akhirnya aku menemukan jawaban yang benar - benar bahwa vini sungguhan aku menjawab kalau aku sayang sama kamu holl tapi aku belum bisa ngungkapin ini semua karna aku takut kamu juga lagi deket sama seseorang.
+
+Lalu kita bertemu lagi di depok pada 28 mei 2026, disna aku merasakan kalau fixx nih aku benar - benar sayang sma kamu holl, dan puncak nya di hari minggu dimana aku tau alasan yang membuat kamu menghindar dari aku apa. disitu aku berusha jujur tentang masalalu aku yang burukk dan disna aku jujur terus terang alhamdulilahnya kamu mau nerima masalalu aku yang buruk.
+
+Dan di hari selasa di tangal 2 juni 2026, sebenarnya sebelum ke bandung aku bimbang sama perasaan akuu. aku harus bagaimana menyampaikan perasaan ini dan aku ga menduga holl bahwa seorang kamu bisa sayang dan takut kehilang akuu.
+
+Dan aku semakin yakin dengan keputusanku kalau aku akan perjuangin kamu holl dan aku akan selalu mengusahakan kamu sebisa mungkin, rasa ini beda rasa sayang yang begitu besar holl .
+
+Makanya, Holl...
+Aku berani ambil resiko.
+Demi kamu, aku akan risk it all untuk kamuu.
+
+Love you holl. 
+
+Dari seseorang yang sayang kamu, yang selalu akan berusaha bisa buat kamu bahagia,
+dan berharap bisa lebih dari itu.
+
+🏠✨`;
+
+let index = 0;
+const letterContent = document.getElementById('letterContent');
+const heartsElement = document.getElementById('hearts');
+
+function typeLetter() {
+    if (index < loveLetterText.length) {
+        if (loveLetterText[index] === '\n') {
+            letterContent.innerHTML += '<br>';
+        } else {
+            letterContent.innerHTML += loveLetterText[index];
+        }
+        index++;
+        setTimeout(typeLetter, 50);
+    } else {
+        startHeartAnimation();
+    }
+}
+
+function startHeartAnimation() {
+    const hearts = ['💖', '💕', '💗', '💓', '💘', '💝', '❤️', '💞'];
+    let heartIndex = 0;
+    setInterval(() => {
+        heartsElement.innerHTML = hearts[heartIndex % hearts.length];
+        heartIndex++;
+    }, 500);
+}
+
+window.addEventListener('load', () => {
+    typeLetter();
+});
+
+// Lagu otomatis
+function playMusic() {
+    const audio = new Audio('risk-it-all.mp3');
+    audio.loop = true;
+    audio.volume = 0.5;
+    audio.play().catch(() => {
+        document.body.addEventListener('click', () => audio.play(), { once: true });
+    });
+}
+playMusic();
+
+// Bunga jatuh
+function createFlower() {
+    const flower = document.createElement('div');
+    flower.className = 'flower';
+    flower.innerHTML = ['🌸', '🌺', '🌸', '💮', '🏵️', '🌷', '🌹'][Math.floor(Math.random() * 7)];
+    flower.style.left = Math.random() * 100 + '%';
+    flower.style.fontSize = (Math.random() * 20 + 15) + 'px';
+    flower.style.animationDuration = Math.random() * 5 + 4 + 's';
+    flower.style.animationDelay = Math.random() * 5 + 's';
+    document.getElementById('fallingFlowers').appendChild(flower);
+    setTimeout(() => flower.remove(), 10000);
+}
+setInterval(createFlower, 500);
+</script>
+</body>
+</html>
